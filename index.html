@@ -3,21 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chasse aux Trésors</title>
+    <title>Treasure Hunt Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        #game {
+            margin-top: 20px;
+        }
+        .location {
+            border: 1px solid #ccc;
+            margin: 10px 0;
+            padding: 10px;
+            background: white;
+        }
+        .hidden {
+            display: none;
+        }
+        button {
+            padding: 10px 15px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome to the Chasse aux Trésors Game!</h1>
-    <p>Get ready for an exciting treasure hunt adventure!</p>
-    <h2>How to Play</h2>
-    <p>Your mission is to find the hidden treasures by solving clues and exploring the game area.</p>
-    <h2>Rules</h2>
-    <ul>
-        <li>Follow the clues carefully.</li>
-        <li>Work as a team to solve puzzles.</li>
-        <li>Have fun and enjoy the game!</li>
-    </ul>
-    <footer>
-        <p>&copy; 2026 Chasse aux Trésors</p>
-    </footer>
+    <h1>Treasure Hunt Game</h1>
+    <div id="game">
+        <div class="location hidden" id="location1">
+            <h2>Location 1</h2>
+            <p>This is the first clue. Find the treasure!</p>
+            <button onclick="nextLocation(1)">Next Location</button>
+        </div>
+        <div class="location hidden" id="location2">
+            <h2>Location 2</h2>
+            <p>You found the second hint!</p>
+            <button onclick="nextLocation(2)">Next Location</button>
+        </div>
+        <div class="location hidden" id="location3">
+            <h2>Location 3</h2>
+            <p>This is the final treasure location!</p>
+            <button onclick="finishGame()">Finish Game</button>
+        </div>
+        <button onclick="startGame()">Start Game</button>
+    </div>
+    <script>
+        function startGame() {
+            document.getElementById('location1').classList.remove('hidden');
+            document.querySelector('button').style.display = 'none';
+        }
+
+        function nextLocation(location) {
+            document.getElementById('location' + location).classList.add('hidden');
+            if (location < 3) {
+                document.getElementById('location' + (location + 1)).classList.remove('hidden');
+            }
+        }
+
+        function finishGame() {
+            alert('Congratulations! You found the treasure!');
+        }
+    </script>
 </body>
 </html>

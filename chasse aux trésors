@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chasse aux Trésors - 50 Ans Chaussures du Château</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 100%;
+            overflow: hidden;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            background: linear-gradient(135deg, #d4a574 0%, #c9956f 100%);
+            padding: 30px 20px;
+            text-align: center;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.95;
+        }
+
+        .logo {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .content {
+            padding: 30px 20px;
+        }
+
+        .screen {
+            display: none;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .welcome-screen h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #1a1a2e;
+        }
+
+        .welcome-screen p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        .rules {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 14px;
+            line-height: 1.8;
+            color: #666;
+        }
+
+        .rules strong {
+            color: #d4a574;
+        }
+
+        .question-screen h2 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #1a1a2e;
+        }
+
+        .progress-bar {
+            background: #e0e0e0;
+            height: 8px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #d4a574, #c9956f);
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .question-number {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .question-text {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 20px;
+            line-height: 1.6;
+            padding: 15px;
+            background: #f9f9f9;
+            border-left: 4px solid #d4a574;
+            border-radius: 5px;
+        }
+
+        .hint {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 10px 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #e65100;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1a1a2e;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #d4a574;
+            box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.1);
+        }
+
+        .error-message {
+            color: #d32f2f;
+            font-size: 14px;
+            margin-top: 8px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .success-message {
+            color: #388e3c;
+            font-size: 14px;
+            margin-top: 8px;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .next-location {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 12px 15px;
+            margin-top: 15px;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #2e7d32;
+            display: none;
+        }
+
+        .next-location.show {
+            display: block;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #d4a574, #c9956f);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(212, 165, 116, 0.3);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: #f5f5f5;
+            color: #333;
+            border: 2px solid #e0e0e0;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .success-screen {
+            text-align: center;
+        }
+
+        .success-screen h2 {
+            font-size: 28px;
+            color: #388e3c;
+            margin-bottom: 20px;
+        }
+
+        .trophy {
+            font-size: 80px;
+            margin: 20px 0;
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .password-box {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #d4a574;
+        }
+
+        .password-label {
+            font-size: 14px;
+            color: #999;
+            margin-bottom: 10px;
+        }
+
+        .password-code {
+            font-size: 32px;
+            font-weight: 700;
+            color: #d4a574;
+            letter-spacing: 8px;
+            word-break: break-all;
+            font-family: 'Courier New', monospace;
+        }
+
+        .final-message {
+            font-size: 16px;
+            color: #555;
+            line-height: 1.6;
+            margin-top: 20px;
+        }
+
+        .copy-btn {
+            margin-top: 15px;
+            background: #2196F3;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .copy-btn:hover {
+            background: #1976D2;
+        }
+
+        .copy-feedback {
+            font-size: 12px;
+            color: #4caf50;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .copy-feedback.show {
+            display: block;
+        }
+
+        .letter-display {
+            display: inline-block;
+            background: #d4a574;
+            color: white;
+            padding: 5px 10px;
+            margin: 2px;
+            border-radius: 5px;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .content {
+                padding: 20px 15px;
+            }
+
+            .password-code {
+                font-size: 24px;
+                letter-spacing: 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">🏰</div>
+            <h1>Chasse aux Trésors</h1>
+            <p>50 Ans de Pas, 50 Ans d'Histoires</p>
+        </div>
+
+        <div class="content">
+            <!-- ÉCRAN D'ACCUEIL -->
+            <div class="screen active welcome-screen" id="welcomeScreen">
+                <h2>Bienvenue dans l'Aventure !</h2>
+                <p>Explorez notre magasin et résolvez les énigmes pour découvrir le trésor des 50 ans de Chaussures du Château.</p>
+                
+                <div class="rules">
+                    <strong>📋 Règles du Jeu :</strong><br>
+                    • Vous avez 5 énigmes à résoudre<br>
+                    • Explorez le magasin pour trouver les réponses<br>
+                    • Chaque réponse vous donnera une lettre<br>
+                    • Reconstituez le mot de passe final<br>
+                    • Présentez-le au personnel pour gagner votre porte-clé collector !
+                </div>
+
+                <button class="btn-primary" onclick="startGame()">Commencer l'Aventure</button>
+            </div>
+
+            <!-- ÉCRAN DES QUESTIONS -->
+            <div class="screen question-screen" id="questionScreen">
+                <div class="question-number">Énigme <span id="questionNumber">1</span> / 5</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 20%;"></div>
+                </div>
+
+                <div class="question-text" id="questionText"></div>
+                
+                <div class="hint" id="hintBox"></div>
+
+                <div class="input-group">
+                    <label for="answerInput">Votre réponse :</label>
+                    <input type="text" id="answerInput" placeholder="Entrez votre réponse..." autocomplete="off">
+                    <div class="error-message" id="errorMessage">❌ Réponse incorrecte. Réessayez !</div>
+                    <div class="success-message" id="successMessage">✅ Bravo ! Lettre trouvée : <span id="foundLetter"></span></div>
+                    <div class="next-location" id="nextLocation"></div>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn-primary" onclick="validateAnswer()">Valider</button>
+                    <button class="btn-secondary" onclick="showHint()">Indice</button>
+                </div>
+            </div>
+
+            <!-- ÉCRAN DE SUCCÈS -->
+            <div class="screen success-screen" id="successScreen">
+                <div class="trophy">🎉</div>
+                <h2>Bravo !</h2>
+                <p style="font-size: 16px; color: #555; margin-bottom: 20px;">Vous avez résolu toutes les énigmes !</p>
+
+                <div class="password-box">
+                    <div class="password-label">Votre mot de passe secret :</div>
+                    <div class="password-code" id="finalPassword"></div>
+                </div>
+
+                <button class="copy-btn" onclick="copyPassword()">📋 Copier le mot de passe</button>
+                <div class="copy-feedback" id="copyFeedback">✅ Copié dans le presse-papiers !</div>
+
+                <div class="final-message">
+                    <strong>Présentez ce mot de passe au personnel du magasin pour recevoir votre porte-clé collector exclusif "50 ans Chaussures du Château" !</strong>
+                </div>
+
+                <button class="btn-secondary" onclick="resetGame()" style="margin-top: 20px;">Recommencer</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Données des énigmes
+        const enigmes = [
+            {
+                numero: 1,
+                question: "Chaussures du Château a ouvert ses portes en 1979. Quel était le nom de l'enseigne à ses tout débuts, avant de devenir Chaussures du Château ?",
+                hint: "Cherchez près de l'entrée, là où notre histoire commence.",
+                reponse: "andrew's chaussures",
+                lettre: "A",
+                nextLocation: "Rendez-vous au rayon Enfant / Bébé pour l'énigme suivante !"
+            },
+            {
+                numero: 2,
+                question: "Pour les premiers pas de bébé, le bon chaussant est essentiel. Trouvez le rayon 'Bébé' et identifiez une marque de chaussures qui prend soin des petits pieds, dont le nom commence par 'S'.",
+                hint: "Les plus petits ont aussi droit à de grandes chaussures !",
+                reponse: "shoopom",
+                lettre: "S",
+                nextLocation: "Direction le rayon Confort & Pieds Sensibles pour continuer !"
+            },
+            {
+                numero: 3,
+                question: "Notre expertise, c'est aussi le confort. Dans notre espace dédié aux pieds sensibles, quelle est la marque allemande reconnue pour ses chaussures confortables, dont le nom rime avec 'lieur' ?",
+                hint: "Le bien-être commence par les pieds.",
+                reponse: "rieker",
+                lettre: "R",
+                nextLocation: "Allez explorer le rayon Femme & Nouveautés !"
+            },
+            {
+                numero: 4,
+                question: "Chaussures du Château est toujours à la pointe de la mode. Dans le rayon 'Femme', parmi les nouveautés, trouvez une paire de sneakers dont la semelle est particulièrement épaisse et colorée. Quelle est la couleur dominante de cette semelle ?",
+                hint: "Suivez la tendance, elle est à vos pieds !",
+                reponse: "rose",
+                lettre: "R",
+                nextLocation: "Presque fini ! Allez au rayon Maroquinerie & Accessoires !"
+            },
+            {
+                numero: 5,
+                question: "Pour prendre soin de vos chaussures, nous proposons des produits d'entretien de qualité. Trouvez le rayon 'Accessoires' et identifiez la marque de cirage et d'imperméabilisant que nous recommandons, dont le nom commence par 'C'.",
+                hint: "Un bon entretien, c'est la clé de la longévité.",
+                reponse: "collonil",
+                lettre: "C",
+                nextLocation: "Vous avez trouvé tous les indices !"
+            }
+        ];
+
+        let gameState = {
+            currentQuestion: 0,
+            answers: [],
+            letters: [],
+            hintUsed: false
+        };
+
+        function startGame() {
+            gameState = {
+                currentQuestion: 0,
+                answers: [],
+                letters: [],
+                hintUsed: false
+            };
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const screen = document.getElementById('welcomeScreen');
+            screen.classList.remove('active');
+            
+            const questionScreen = document.getElementById('questionScreen');
+            questionScreen.classList.add('active');
+
+            const enigme = enigmes[gameState.currentQuestion];
+            document.getElementById('questionNumber').textContent = enigme.numero;
+            document.getElementById('questionText').textContent = enigme.question;
+            document.getElementById('hintBox').textContent = "💡 " + enigme.hint;
+            document.getElementById('answerInput').value = '';
+            document.getElementById('errorMessage').classList.remove('show');
+            document.getElementById('successMessage').classList.remove('show');
+            document.getElementById('nextLocation').classList.remove('show');
+            document.getElementById('answerInput').focus();
+
+            const progress = ((gameState.currentQuestion + 1) / enigmes.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+
+            gameState.hintUsed = false;
+        }
+
+        function validateAnswer() {
+            const userAnswer = document.getElementById('answerInput').value.toLowerCase().trim();
+            const enigme = enigmes[gameState.currentQuestion];
+
+            if (userAnswer === enigme.reponse) {
+                // Réponse correcte
+                gameState.answers.push(userAnswer);
+                gameState.letters.push(enigme.lettre);
+
+                document.getElementById('successMessage').classList.add('show');
+                document.getElementById('foundLetter').textContent = enigme.lettre;
+                document.getElementById('errorMessage').classList.remove('show');
+                document.getElementById('nextLocation').textContent = "📍 " + enigme.nextLocation;
+                document.getElementById('nextLocation').classList.add('show');
+
+                document.getElementById('answerInput').disabled = true;
+                document.querySelector('.btn-primary').disabled = true;
+                document.querySelector('.btn-secondary').disabled = true;
+
+                setTimeout(() => {
+                    if (gameState.currentQuestion < enigmes.length - 1) {
+                        gameState.currentQuestion++;
+                        showQuestion();
+                    } else {
+                        showSuccess();
+                    }
+                }, 3000);
+            } else {
+                // Réponse incorrecte
+                document.getElementById('errorMessage').classList.add('show');
+                document.getElementById('successMessage').classList.remove('show');
+                document.getElementById('nextLocation').classList.remove('show');
+                document.getElementById('answerInput').select();
+            }
+        }
+
+        function showHint() {
+            if (!gameState.hintUsed) {
+                alert("💡 Indice : " + enigmes[gameState.currentQuestion].hint);
+                gameState.hintUsed = true;
+            } else {
+                alert("Vous avez déjà utilisé votre indice pour cette énigme !");
+            }
+        }
+
+        function showSuccess() {
+            document.getElementById('questionScreen').classList.remove('active');
+            document.getElementById('successScreen').classList.add('active');
+
+            const password = gameState.letters.join('');
+            document.getElementById('finalPassword').textContent = password;
+        }
+
+        function copyPassword() {
+            const password = document.getElementById('finalPassword').textContent;
+            navigator.clipboard.writeText(password).then(() => {
+                const feedback = document.getElementById('copyFeedback');
+                feedback.classList.add('show');
+                setTimeout(() => {
+                    feedback.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        function resetGame() {
+            document.getElementById('successScreen').classList.remove('active');
+            document.getElementById('welcomeScreen').classList.add('active');
+            gameState = {
+                currentQuestion: 0,
+                answers: [],
+                letters: [],
+                hintUsed: false
+            };
+        }
+
+        // Permettre la validation avec la touche Entrée
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('answerInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    validateAnswer();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
